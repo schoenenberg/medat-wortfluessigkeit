@@ -1,0 +1,16 @@
+runtime: go111
+
+env_variables:
+  BUCKET_NAME: "word-storage"
+
+handlers:
+  - url: /
+    script: auto
+    secure: always
+  - url: /word/new
+    script: auto
+    secure: always
+  - url: /(.+)
+    static_files: frontend/\1
+    upload: frontend/.*
+    secure: always
