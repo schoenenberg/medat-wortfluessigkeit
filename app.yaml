@@ -11,6 +11,7 @@ handlers:
     script: auto
     secure: always
   - url: /(.+)
-    static_files: frontend/\1
-    upload: frontend/.*
+    static_files: frontend/dist/\1
+    upload: frontend/dist/.*
     secure: always
+

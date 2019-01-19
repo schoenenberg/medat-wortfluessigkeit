@@ -1,2 +1,3 @@
 .idea/
-frontend
+frontend/node-modules
+frontend/dist

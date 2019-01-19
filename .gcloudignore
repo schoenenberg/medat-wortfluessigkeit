@@ -6,7 +6,7 @@
 # For more information, run:
 #   $ gcloud topic gcloudignore
 #
-.gcloudignore
+#.gcloudignore
 # If you would like to upload your .git directory, .gitignore file or files
 # from your .gitignore file, remove the corresponding line
 # below:
@@ -23,3 +23,8 @@
 *.test
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+frontend/node_modules/
+frontend/e2e/
+*README.md
+*LICENSE

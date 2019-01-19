@@ -1,0 +1,7 @@
+steps:
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['--prefix', './frontend', 'install', './frontend']
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['--prefix', './frontend', 'run', 'build', '--prod']
+- name: "gcr.io/cloud-builders/gcloud"
+  args: ['app', 'deploy']

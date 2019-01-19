@@ -22,7 +22,6 @@ package main
 
 import (
 	"bytes"
-	"cloud.google.com/go/storage"
 	"context"
 	"encoding/csv"
 	"encoding/json"
@@ -33,6 +32,8 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	"cloud.google.com/go/storage"
 )
 
 const (
