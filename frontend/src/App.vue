@@ -57,13 +57,9 @@
         methods: {
             refresh: function () {
                 axios
-                    .get("https://medat-wortfluessigkeit.appspot.com/word/new")
+                    .get("http://localhost:8081/word/new")
                     .then(response => this.myWord = response.data);
             }
         }
     }
 </script>
-
-<style>
-
-</style>

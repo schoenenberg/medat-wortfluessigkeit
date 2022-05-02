@@ -22,25 +22,20 @@ package main
 
 import (
 	"bytes"
-	"context"
+	_ "embed"
 	"encoding/csv"
 	"encoding/json"
-	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
 	"os"
 	"strings"
 	"time"
-
-	"cloud.google.com/go/storage"
-)
-
-const (
-	objectName = "words.csv"
 )
 
 var (
+	//go:embed etc/words.csv
+	b             []byte
 	filteredWords []string
 )
 
@@ -55,32 +50,12 @@ func init() {
 
 func main() {
 	// Get environment variables
-	projectID := os.Getenv("GOOGLE_CLOUD_PROJECT")
-	bucketName := os.Getenv("BUCKET_NAME")
-	port := os.Getenv("PORT")
+	port := "8080"
+	if p := os.Getenv("PORT"); p != "" {
+		port = p
+	}
+
 	_, debug := os.LookupEnv("DEBUG")
-
-	// Check if environment variables are set.
-	if projectID == "" {
-		log.Fatalln("GOOGLE_CLOUD_PROJECT environment variable must be set.")
-	} else if bucketName == "" {
-		log.Fatalln("BUCKET_NAME environment variable must be set.")
-	} else if port == "" {
-		log.Fatalln("PORT environment variable must be set.")
-	}
-
-	// Creates a client.
-	ctx := context.Background()
-	client, err := storage.NewClient(ctx)
-	if err != nil {
-		log.Fatalf("Failed to create client: %v", err)
-	}
-
-	// Read file from storage bucket
-	b, err := readFileFromStorageBucket(ctx, client, bucketName, objectName)
-	if err != nil {
-		log.Fatalln(err)
-	}
 
 	// Parse file
 	words, err := readWords(b)
@@ -125,22 +100,6 @@ func handleWordRequest(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(b)
-}
-
-func readFileFromStorageBucket(ctx context.Context, client *storage.Client, bucket, object string) ([]byte, error) {
-	// Create bucket reader
-	rc, err := client.Bucket(bucket).Object(object).NewReader(ctx)
-	if err != nil {
-		return nil, err
-	}
-	defer rc.Close()
-
-	// .. and read
-	data, err := ioutil.ReadAll(rc)
-	if err != nil {
-		return nil, err
-	}
-	return data, nil
 }
 
 func readWords(b []byte) ([]string, error) {
