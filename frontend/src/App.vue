@@ -57,7 +57,7 @@
         methods: {
             refresh: function () {
                 axios
-                    .get("http://localhost:8081/word/new")
+                    .get("https://medat-wortfluessigkeit-backend.herokuapp.com/word/new")
                     .then(response => this.myWord = response.data);
             }
         }
