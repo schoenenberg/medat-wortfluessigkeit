@@ -21,62 +21,56 @@
   -->
 
 <template>
-  <div id="app" class="container">
-    <h1 class="text-center">MedAT-Wortflüssigkeit</h1>
-    <div class="my-2 row align-items-end" v-if="myWord">
-      <div class="col">
-        <WordDialog
-          v-bind:shuffled="myWord.Shuffled"
-          v-bind:solution="myWord.Solution"
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Wort</h5>
+      <p class="card-text">{{ separateShuffledWord }}</p>
+      <hr />
+      <p v-show="showSolution">
+        <strong>Lösung:</strong> {{ solution }}
+      </p>
+      <div class="d-flex justify-content-between">
+        <button
+          class="btn btn-outline-danger mr-auto"
+          v-on:click="showSolution = !showSolution"
         >
-          <button class="btn btn-outline-secondary" v-on:click="refresh">
-            Nächstes Wort
-          </button>
-        </WordDialog>
+          Lösung
+        </button>
+        <slot></slot>
       </div>
-    </div>
-    <div class="mt-5 row col justify-content-center">
-      <span class="text-muted"
-        >Made with <span style="color: #e25555">&hearts;</span> for Katja!</span
-      >
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-import WordDialog from "./components/WordDialog.vue";
-
 export default {
-  name: "App",
-  components: {
-    WordDialog,
-  },
+  name: "WordDialog",
+  props: ["shuffled", "solution"],
   data() {
     return {
-      myWord: null,
+      showSolution: false,
     };
   },
-  mounted() {
-    this.refresh();
+  computed: {
+    separateShuffledWord: function () {
+      return this.shuffled.split("").join(" ");
+    },
+    solutionCollapseClassAttribute: function () {
+      return "collapse" + (this.showSolution === true ? " show" : "");
+    },
   },
-  methods: {
-    refresh: function () {
-      axios
-        .get("https://medat-wortfluessigkeit-backend.herokuapp.com/word/new")
-        .then((response) => (this.myWord = response.data));
+  watch: {
+    shuffled: function (newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.showSolution = false;
+      }
     },
   },
 };
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style scoped>
+.card {
+  min-width: 18rem;
 }
 </style>
