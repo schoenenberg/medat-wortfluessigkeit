@@ -26,9 +26,7 @@
       <h5 class="card-title">Wort</h5>
       <p class="card-text">{{ separateShuffledWord }}</p>
       <hr />
-      <p v-show="showSolution">
-        <strong>Lösung:</strong> {{ solution }}
-      </p>
+      <p v-show="showSolution"><strong>Lösung:</strong> {{ solution }}</p>
       <div class="d-flex justify-content-between">
         <button
           class="btn btn-outline-danger mr-auto"
